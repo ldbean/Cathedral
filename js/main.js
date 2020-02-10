@@ -1,12 +1,3 @@
-let td = document.querySelectorAll('td')
-for (let i = 0; i < td.length; i++) { 
-    td[i].removeAttribute('id')
-    td[i].setAttribute('id',`sq${i}`)
-    console.log(td[i])
-}
-console.log(td)
-
-
 // CONSTANTS
 const lookup = {
     '1' : 'mint',
@@ -18,29 +9,30 @@ const lookup = {
 // PIECES
 const pieces = { 
     infirmary: [
-        [0, 1, 0]
-        [1, 1, 1]
-        [0, 1, 0]
+        0, 1, 0,
+        1, 1, 1,
+        0, 1, 0
     ],
                     
     square: [
-        [0, 0, 0]
-        [0, 1, 1]
-        [0, 1, 1]
+        0, 0, 0,
+        0, 1, 1,
+        0, 1, 1
     ],
 
     inn: [
-        [0, 1, 0]
-        [1, 1, 0]
-        [0, 0, 0]
+        0, 1, 0,
+        1, 1, 0,
+        0, 0, 0
     ],
 
     tavern: [
-        [0, 0, 0]
-        [0, 1, 0]
-        [0, 0, 0]
+        0, 0, 0,
+        0, 1, 0,
+        0, 0, 0
     ]
 }
+
 
 // STATE VARIABLES
 let board;
@@ -49,6 +41,8 @@ let winner;
 let occupiedSpaces = [];
 let height = 10;
 let width = 10;
+let center;
+
 
 
 // CACHED EVENTS
@@ -56,12 +50,15 @@ let spaces = document.querySelectorAll('td div');
 let message = document.querySelector('h3');
 let btn = document.getElementById('reset');
 let table = document.querySelector('table');
+let deck = document.querySelectorAll('.deck');
+let pieceContainer = document.createElement('div')
+pieceContainer.setAttribute('draggable', 'true')
 
 
 // EVENT LISTENERS
 // btn.addEventListener('click', initialize)
 table.addEventListener('click', handleMove)
-// space.addEventListener('click', displayPiece)
+// space.addEventListener('mouseup', displayPiece)
 
 
 // FUNCTIONS
@@ -78,6 +75,7 @@ function handleMove(event) {
  
         // don't show preview
 
+    
     // when taken, update state variables (board, turn, winner)
 
     //change turns
@@ -88,26 +86,34 @@ function handleMove(event) {
     render();
 }
 
+
 function getWinner() {
 
 }
 
 
-function displayPiece () {
-    // let currentPiece = playerChoice;
-    // let center = Math.floor(width / 2);
-    // let piece = pieces[currentPiece];
-    // let location = [center, 0];
+function displayPiece (piece, player) {
+    let container = deck[player].appendChild(pieceContainer.cloneNode())
+    let piecePart = document.createElement('div')
+    for (let i = 0; i <= piece.length; i++){
+        container.append(piecePart.cloneNode())
 
-    // currentPiece = {
-    //     piece: piece,
-    //     color: colors[randomColor],
-    //     location: location,
-    //     indexes: getBlockNumbers(shape, location)
-    // };
+        if (piece[i] == 0) {
+            piecePart.setAttribute('class', 'pHolder')
 
-
+        } else {
+            piecePart.setAttribute('class', 'solid')
+        }
+    }
 }
+console.log(pieces.infirmary.length)
+
+
+
+
+
+
+
 function placePiece(i,j) { 
     for (let x = 0; x < board.length; x++){
         for(let y = 0; y < board[x].length; y++) {
@@ -139,6 +145,15 @@ function initialize() {
     turn = 1;
     winner = null;
     render();
+    displayPiece(pieces.infirmary, 0);
+    displayPiece(pieces.inn, 0);
+    displayPiece(pieces.square, 0);
+    displayPiece(pieces.tavern, 0);
+
+    displayPiece(pieces.infirmary, 1);
+    displayPiece(pieces.inn, 1);
+    displayPiece(pieces.square, 1);
+    displayPiece(pieces.tavern, 1);
 }
 
 
