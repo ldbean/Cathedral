@@ -15,6 +15,9 @@
     background: rgb(33, 31, 31);
     color:mintcream;
 }
+h4 {
+    margin: 12px 8px 8px 8px;
+}
 
 .footer {
     background: darkgray;
@@ -34,38 +37,66 @@ td div {
     pointer-events: none;
     background-color:rgb(87, 61, 87);
     border: 1px solid black;
+    margin: -1px;
     
 }
 aside > div {
     height: 100%;
-    background-color: rgb(207, 218, 227);
-    border: 2px solid #404f57;
+    background-color: rgb(87, 61, 87);
+    border: 2px solid black;
 }
-.deck {
-    
-}
-.solid {
-    background-color: rgb(155, 247, 208);
-    height:50px;
+
+.player1{
+    background-color: rgb(149, 245, 229);
+    height: 50px;
     width: 50px;
+    border: 1px solid black;
+    margin: -1px;
+}
+.player2{
+    background-color: rgb(60, 109, 213);
+    height: 50px;
+    width: 50px;
+    border: 1px solid black;
+    margin: -1px;
 }
 .pHolder {
     height: 50px;
     width: 50px;
+    margin: 0;
 }
-.deck > div {
+.invisible {
+    display: none;
+}
+.hovered {
+ background-color: white;
+ stroke: aliceblue;
+}
+
+.hold {
+    border: solid black 1px;
+}
+.unclaimed {
+    border-style: dashed;
+}
+.deck {
+    display: flex;
+    flex-wrap: wrap;
+}
+.deck > section {
     display:flex;
     flex-wrap: wrap;
-    height:150px;
-    width: 150px;
+    height:151px;
+    width: 151px;
     margin: 4px;
 
 }
 .aside {
-    background-color: #445566;
+    background-color: #577491;
     justify-content: space-around;
     display: flex;
     flex-direction: column;
+    
 
 }
 
@@ -81,6 +112,7 @@ aside > div {
 }
 
 body {
-    padding: 8px; 
+    padding: 6px; 
     font-family: 'Alegreya', serif;
+
 }
