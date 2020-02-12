@@ -1,7 +1,7 @@
 // CONSTANTS
 const lookup = {
-    '1' : 'mint',
-    '-1' : 'teal',
+    '1' : 'rgb(149, 245, 229)',
+    '-1' : 'rgb(60, 109, 213)',
     'null' : 'black',
     '0': 'black'
 }
@@ -21,9 +21,9 @@ const pieces = {
     ],
                     
     square: [
-        0, 0, 0,
-        0, 1, 1,
-        0, 1, 1
+        1, 1, 0,
+        1, 1, 0,
+        0, 0, 0
     ],
 
     inn: [
@@ -52,67 +52,123 @@ let center;
 
 // CACHED EVENTS
 let spaces = document.querySelectorAll('td div');
-let claimed = document.querySelectorAll('.claimed');
-let unclaimed = document.querySelectorAll('.unclaimed');
+let drag = document.querySelectorAll('.drag');
+let available = document.querySelectorAll('.available');
 let message = document.querySelector('h3');
 let btn = document.getElementById('reset');
 let table = document.querySelector('table');
 let deck = document.querySelectorAll('.deck');
+let aside = document.querySelector('aside')
 
+// TODO How do I store the current piece being dragged in a variable?
 
 // EVENT LISTENERS
 btn.addEventListener('click', initialize)
 table.addEventListener('click', handleMove)
-// claimed.addEventListener('dragstart', dragStart)
-// claimed.addEventListener('dragend', dragEnd)
-
-//Loop through unclaimed and call drag events
-for(const space of unclaimed) {
-    unclaimed.addEventListener('dragover', dragOver);
-    unclaimed.addEventListener('dragenter', dragEnter);
-    unclaimed.addEventListener('dragleave', dragLeave);
-    unclaimed.addEventListener('drop', dragDrop);
-}
 
 // FUNCTIONS
 initialize();
+function checkIfClaimed(event) {
 
-    // DRAG FUNCTIONS
-function dragStart () {
-    this.className += ' hold';
-    setTimeout(() => this.className = 'invisible', 0)
 }
 
-function dragEnd () {
-    this.className = 'claimed';
-}
-function dragOver(e) {
-    e.preventDefault();
-}
-function dragEnter() {
-    this.className += ' hovered'
-}
-function dragLeave() {
-    this.className = 'unclaimed'
-}
-function dragDrop() {
-    this.className = 'unclaimed'
-    this.append(claimed);
-}
+// drag.forEach(item => {
+//     item.addEventListener('dragstart', dragStart)
+//     item.addEventListener('dragend', dragEnd)
+// });
 
+// Loop through available and call drag events
+// for(const s of available) {
+//     s.addEventListener('dragover', dragOver);
+//     s.addEventListener('dragenter', dragEnter);
+//     s.addEventListener('dragleave', dragLeave);
+//     s.addEventListener('drop', dragDrop);
+//     console.log(s)
+// }
+
+
+// function setClaimedColor (player, index) {
+//     for (let i = 0; i < spaces.length; i++) {
+//         if (board[index] = player){
+//             spaces[i].style.backgroundColor = lookup[player]
+//             console.log(lookup[player])
+//         } 
+//     }
+// }
+
+// console.log(spaces[1])
+// spaces[2].className = 'claimed'
+// setClaimedColor(1)
+// console.log(spaces)
 
 function handleMove(event) {
     // get the index of the event.target
     let index = parseInt(event.target.id.replace('sq', ''));
+    let currentPiece = // current item being dragged
     console.log(index)
-    // check if the spaces are available
-    // if (!space.hasAttribute('class', 'claimed')) { }
-        // space can be claimed
+    console.log(board[index])
     
-        // TODO show preview of piece placement (hovered)
+   // loop through the math grid (or the SELECTED PIECE'S array,)
+    // for(let n = 0; n < mathGrid.length; n++) {
 
-    
-    // when taken, update state variables (board, turn, winner)
+    //     //  TODO: if the SELECETED PIECE's block at position n is a '1'
+    //     if (pieces.infirmary[n] == '1') { 
+    //         console.log('block ' + n)
+
+    //         // loop through again
+    //         for (let i = 0; i < mathGrid.length; i++) {
+
+    //             // and if the space is empty
+    //             if (board[index + mathGrid[i]] == null){ 
+    //                 console.log('test')
+    //                 // update board state on event
+    //                 board[index + mathGrid[n]] = turn
+
+    //                 for(let j = 0; j < board.length; j++) { 
+    //                     if (board[j] != null && board[j] == turn) { 
+    //                         spaces[j].style.backgroundColor = lookup[turn]
+    //                         console.log(board[j])
+    //                     }
+    //                 }
+            
+    //             } else {
+    //                 console.log(`can't place block`)
+    //             }
+    //         }
+    //     }
+        
+    // }
+
+    // Loop through the 9 spaces around index
+    for(let n = 0; n < mathGrid.length; n++){ 
+        // If any of the spaces surrounding the index (in the shape of the piece selected) are not null
+        if (board[index + mathGrid[n]] != null) {
+            // return
+            return `space taken`;
+        } else { 
+            // loop through the spaces again
+            for(let i = 0; i < mathGrid.length; i++) {
+                // if the selected piece at the loop position is 1
+                if(pieces.infirmary[i] == '1'){
+                    // update the board to match the turn
+                    spaces[index + mathGrid[i]].style.backgroundColor = lookup[turn]
+                    
+                    board[index + mathGrid[n]] = turn
+                }
+            }
+        }
+    }
+
+    // for(let j = 0; j < board.length; j++) {
+    //     if(board[j] == turn){
+    //         spaces[j].style.backgroundColor = lookup[turn]
+    //     }
+
+    // }
+
+
+    console.log(board)
+    console.log('turn ' + turn)
 
     //change turns
     turn *= -1;
@@ -122,25 +178,17 @@ function handleMove(event) {
     render();
 }
 
-
-
-
-
-function getWinner() {
-
-}
-
-function pieceBuild (piece, player) {
+function pieceBuild (building, player) {
 // create a separate space for generating pieces
     let pieceStage = document.createDocumentFragment();
 
-// create a bounding box for the piece and add its attributes
-    let pieceBound = document.createElement('section')
-    pieceBound.id = piece + ' ' + player
+// create a bounding box for the building and add its attributes
+    let pieceBound = document.createElement('div')
     pieceBound.draggable = true;
+    pieceBound.className = 'drag'
 
-    for (let i = 0; i < piece.length; i++){
-    // create a pieceBlock for each piece's array item
+    for (let i = 0; i < building.length; i++){
+    // create a pieceBlock for each building's array item
         let pieceBlock = document.createElement('div')
         pieceBlock.id = player + i
 
@@ -148,35 +196,68 @@ function pieceBuild (piece, player) {
         if (player == 0){ 
 
         // color the block according to the number in the array
-            if (piece[i] == 0) {
+            if (building[i] == 0) {
                 pieceBlock.className = 'pHolder'
 
             } else {
                 pieceBlock.className = 'player1'
             }
         } else {
-            if (piece[i] == 0) {
+            if (building[i] == 0) {
                 pieceBlock.className = 'pHolder'
 
             } else {
                 pieceBlock.className = 'player2'
             }
         }
-    // add blocks to bounding box
+        // add blocks to bounding box
         pieceBound.appendChild(pieceBlock)
     }
-
-// add piece to the stage
+    // add building to the stage
     pieceStage.appendChild(pieceBound)
-// add final piece to respective player's deck
+    // add final building to respective player's deck
     deck[player].appendChild(pieceStage)
+};
+
+ // DRAG FUNCTIONS
+function dragStart () {
+    this.className += ' hold';
+    setTimeout(() => this.className = 'invisible', 0)
+    console.log("start")
+}
+function dragEnd () {
+    if (this.classList.contains('claimed')){
+        console.log("cant place here!")
+    } else { 
+        this.className = 'claimed'; 
+    }
+    console.log("end")
+}
+function dragOver(e) {
+    console.log('dragging start')
+    e.preventDefault();
+    let index = parseInt(this.id.replace('sq', ''));
+    console.log(index)
+}
+function dragEnter() {
+    this.className += ' hovered'
+}
+function dragLeave() {
+    if (this.classList.contains('claimed')) {
+        this.className = 'available'
+    }
+}
+function dragDrop() {
+    this.className = 'available'
+    // this.append(claimed);
+    let index = parseInt(this.id.replace('sq', ''));
+    console.log(index)
 }
 
-
 function placePiece(index) { 
-// depending on where the center of the dragged piece was placed
+// depending on where the center of the dragged building was placed
 
-// set the value of the board spaces corresponding with the piece array 
+// set the value of the board spaces corresponding with the building array 
 // but only if the value in the pieces array is 1. 
 // Use the mathGrid to determine new index of surrounding blocks 
 
@@ -196,28 +277,32 @@ function render() {
     // TODO check for winner
 
 }
+
 function rotate() {
 
 }
+
+function getWinner() {
+
+}
+
 function initialize() {
     board = [  
-        [null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null, null, null, null]
+        null, null, null, null, null, null, null, null, null, null,
+        null, null, null, null, null, null, null, null, null, null,
+        null, null, null, null, null, null, null, null, null, null,
+        null, null, null, null, null, null, null, null, null, null,
+        null, null, null, null, null, null, null, null, null, null,
+        null, null, null, null, null, null, null, null, null, null,
+        null, null, null, null, null, null, null, null, null, null,
+        null, null, null, null, null, null, null, null, null, null,
+        null, null, null, null, null, null, null, null, null, null,
+        null, null, null, null, null, null, null, null, null, null
     ];
     turn = 1;
     winner = null;
     
     render();
-
-    
 
     pieceBuild(pieces.infirmary, 0);
     pieceBuild(pieces.inn, 0);
@@ -228,10 +313,12 @@ function initialize() {
     pieceBuild(pieces.inn, 1);
     pieceBuild(pieces.square, 1);
     pieceBuild(pieces.tavern, 1);
+   
+    
 
 
     for (s of spaces) { 
-        s.setAttribute('class', 'unclaimed')
+        s.setAttribute('class', 'available')
     }
 }
 

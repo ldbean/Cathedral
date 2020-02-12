@@ -16,7 +16,8 @@
     color:mintcream;
 }
 h4 {
-    margin: 12px 8px 8px 8px;
+    margin: 4px 8px 8px 8px;
+    font-size: 20px;
 }
 
 .footer {
@@ -33,17 +34,17 @@ td div {
     margin: 0 auto;
     height: 50px;
     width: 50px;
-    border-radius: 5%;
+    border-radius: 8%;
     pointer-events: none;
     background-color:rgb(87, 61, 87);
-    border: 1px solid black;
+   
     margin: -1px;
     
 }
 aside > div {
     height: 100%;
     background-color: rgb(87, 61, 87);
-    border: 2px solid black;
+    border: 4px solid black;
 }
 
 .player1{
@@ -60,6 +61,7 @@ aside > div {
     border: 1px solid black;
     margin: -1px;
 }
+
 .pHolder {
     height: 50px;
     width: 50px;
@@ -68,36 +70,45 @@ aside > div {
 .invisible {
     display: none;
 }
+#board {
+    background-color: black;
+    border:3px solid black;
+}
+
 .hovered {
- background-color: white;
- stroke: aliceblue;
+    background-color: white;
+    stroke: aliceblue;
+    border-style: dashed;
 }
 
 .hold {
     border: solid black 1px;
 }
-.unclaimed {
-    border-style: dashed;
+
+.claimed {
+    border-radius: 0%;
+    border: 1px solid black;
+    margin: -2px;
 }
 .deck {
     display: flex;
     flex-wrap: wrap;
+    padding: 5px;
+    width: auto;
 }
-.deck > section {
+.drag{
     display:flex;
     flex-wrap: wrap;
     height:151px;
     width: 151px;
     margin: 4px;
-
 }
 .aside {
+    width: auto;
     background-color: #577491;
     justify-content: space-around;
     display: flex;
     flex-direction: column;
-    
-
 }
 
 @media all and (min-width: 600px) {
@@ -105,7 +116,7 @@ aside > div {
 }
 
 @media all and (min-width: 800px) {
-    .main    { flex: 3 0px; }
+    .main    { flex: 3 0; }
     .aside   { order: 3; } 
     .main    { order: 2; } 
     .footer  { order: 4; }
