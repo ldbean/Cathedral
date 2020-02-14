@@ -48,26 +48,29 @@ aside > div {
 }
 
 .player1{
-    background-color: rgb(149, 245, 229);
-    height: 50px;
-    width: 50px;
+    background-color: rgba(149, 245, 229,0.75);
+    height: 33%;
+    width: 33%;
     border: 1px solid black;
     margin: -1px;
+   
 }
 .player2{
-    background-color: rgb(60, 109, 213);
-    height: 50px;
-    width: 50px;
+    background-color: rgba(60, 109, 213,0.75);
+    height: 33%;
+    width: 33%;
     border: 1px solid black;
     margin: -1px;
+   
+
 }
 
 .pHolder {
-    height: 50px;
-    width: 50px;
+    height: 33%;
+    width: 33%;
     margin: 0;
 }
-.invisible {
+.invisible > * {
     display: none;
 }
 #board {
@@ -81,10 +84,15 @@ aside > div {
     border-style: dashed;
 }
 
-.hold {
+/* .hold {
     border: solid black 1px;
+    width: 150px;
+    height:150px;
+} */
+aside > div > div  {
+    background-image: url("../assets/centerDot.png") ;
+    background-size: contain;
 }
-
 .claimed {
     border-radius: 0%;
     border: 1px solid black;
@@ -94,13 +102,12 @@ aside > div {
     display: flex;
     flex-wrap: wrap;
     padding: 5px;
-    width: auto;
 }
 .drag{
     display:flex;
     flex-wrap: wrap;
-    height:151px;
-    width: 151px;
+    height:50px;
+    width: 50px;
     margin: 4px;
 }
 .aside {
