@@ -1,5 +1,6 @@
 # Cathedral
 The original game of [Cathedral](https://www.cathedral-game.co.nz/index.html) is two-player, city-building strategy board game played with wooden blocks each in the shape of a different medieval building. 
+
 ![boardGame](https://www.cathedral-game.co.nz/gifs/grandalux2.gif)
 ![pieces](/assets/pieces.png)
 
@@ -29,7 +30,7 @@ Each player begins with the same set of buildings of varying shapes and takes tu
 ```
 
 ### Original Wireframe
-![wireframe](http://tiny.cc/6ak0jz) 
+![wireframe](/assets/wireframe.jpeg) 
 
 ### Coming Soon !
 - The ability to rotate the pieces
