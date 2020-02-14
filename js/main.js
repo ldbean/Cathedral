@@ -1,5 +1,7 @@
 // CONSTANTS
 const lookup = {
+    '2': "Two",
+    '4': "One",
     '1' : 'rgb(149, 245, 229)',
     '-1' : 'rgb(60, 109, 213)',
     'null' : 'black',
@@ -8,8 +10,8 @@ const lookup = {
 
 const mathGrid = [
     -11, -10, -9,
-    -1, 0, 1,
-    9, 10, 11
+    -1,   0,   1,
+     9,  10,  11
 ]
 
 const rotateIndex = [
@@ -102,6 +104,9 @@ const pieces = {
         1,0,0,
         1,1,0,
         0,1,0
+    ],
+    cathedralIndex: [
+        -10,-1,0,1,10,20
     ]
 };
 
@@ -110,18 +115,19 @@ const pieces = {
 let board;
 let turn;
 let winner;
-let height = 10;
-let width = 10;
-let center;
-let blockPosIndex = [];
-let player1Pieces = [];
-let player2Pieces = [];
+
 let currentPiece;
+
+let blockPosIndex = [];
 let potentialPieces = [];
+
+let pieceReplace = false;
+let player1Pieces = [Object.keys(pieces)];
+let player2Pieces = [Object.keys(pieces)];
+
 let player1BlockCount = 0
 let player2BlockCount = 0
-let pieceNames = Object.keys(pieces);
-console.log(pieceNames)
+
 
 
 // CACHED EVENTS
@@ -132,6 +138,7 @@ let btn = document.getElementById('reset');
 let boardVis = document.querySelector('#board');
 let deck = document.querySelectorAll('.deck');
 let aside = document.querySelector('aside')
+let bldngs = document.querySelectorAll('.deck div')
 let p1deck = document.querySelector('#player1')
 let p2deck = document.querySelector('#player2')
 
@@ -141,7 +148,7 @@ aside.addEventListener('dragstart', dragStart)
 aside.addEventListener('dragend', dragEnd)
 boardVis.addEventListener('dragover', dragOver);
 boardVis.addEventListener('dragenter', dragEnter);
-boardVis.addEventListener('dragleave', dragLeave);
+// boardVis.addEventListener('dragleave', dragLeave);
 aside.addEventListener('click', rotate);
 aside.addEventListener('dragstart', function(e) {
     console.log(e.target)
@@ -154,6 +161,14 @@ boardVis.addEventListener('drop', handleMove)
                                                                            
 // FUNCTIONS
 initialize();
+
+function randomMsg () {
+    let phrases = ["your go.", "please go.", "we are wating on you.", "please, take your time. I've got all day."]
+    message.textContent += phrases[Math.floor(Math.random() * phrases.length)]
+}
+
+
+
 function pieceBuild (building, player) {
     let thisPiece = document.getElementById(building)
     if (player == 1) { 
@@ -166,19 +181,15 @@ function pieceBuild (building, player) {
         }
     }
     
-    // let pieceN = building.replace('piece.', '')
-    console.log({building})
-    
-    console.log(pieces[building])
     // create a separate space for generating
     let pieceStage = document.createDocumentFragment();
 // create a bounding box for the building and add its attributes
+//  TODO different bounding boxs for each piece
     let pieceBound = document.createElement('div')
     pieceBound.draggable = true;
     pieceBound.className = 'drag'
     pieceBound.className += ' '
-    
-    for (let i = 0; i < 9; i++){
+    for (let i = 0; i < pieces[building].length; i++){
     // create a pieceBlock for each building's array item
         let pieceBlock = document.createElement('div')
         pieceBlock.id = i
@@ -217,8 +228,9 @@ function handleMove(event) {
   
     console.log({index})
     console.log(`currentPiece ${currentPiece}`)
+
     for (b = 0; b < pieces[currentPiece].length; b++) {
-        console.log('beep')
+       
         if (pieces[currentPiece][b] == '1') {
             blockPosIndex.push(mathGrid[b])
         }
@@ -227,11 +239,31 @@ function handleMove(event) {
     console.log(`blockPos set for ${currentPiece}`)
 
     placePiece(index);
+    //if piece is invisible remove it from remaining pieces
+    for(let i = 0; i < bldngs.length; i++){
+        console.log("WHEW"+ i + bldngs + bldngs[1])
+        if (bldngs[i].className == 'invisible') {
+            let idx = player1Pieces.indexOf(bldngs[i].id)
+            player1Pieces.splice(idx,1)
+        }
+    }
+    for(let i = 0; i < p1deck.length; i++){
+        if (p2deck[i].className == 'invisible') {
+            let idx = player2Pieces.indexOf(p2deck[i].id)
+            player2Pieces.splice(idx,1)
+        }
+    }
+
     console.log('turn ' + turn)
     // check winner, getWinner should return true, false, "T" for tie.
-    winner = getWinner(); 
+    
     blockPosIndex = [];
+    winner = getWinner(); 
+    message.textContent = "Player " + (lookup[turn+3]) + " "
+    randomMsg();
 }
+
+
 
 function placePiece(index) { 
     // Loop through the blocks positions on the board based on the event.target
@@ -239,6 +271,7 @@ function placePiece(index) {
     // surrounding and including the index (in the shape of the piece selected) are not null
         if (board[index + blockPosIndex[n]] != null || event.target.nextElementSibling.className == 'border' || event.target.previousElementSibling.className == 'border') { 
             console.log(`can't place at board[${index}]`)
+            pieceReplace = true;
             return;
         }
     }
@@ -247,14 +280,41 @@ function placePiece(index) {
         spaces[index + blockPosIndex[n]].className = "claimed";
         board[index + blockPosIndex[n]] = turn
     }
-    turn *= -1;
-    // if (turn === ) {
-    //     // set other player'spieces to not dragable if it's not the player's turn
-    // } else {
-    //     
-    // }
 
+    // if no index and its surrounding spaces can fit any remaining areas(MVP or their rotations)
+    
+
+    
+    blockCount(currentPiece, turn);
+    console.log({player1BlockCount})
+    console.log({player2BlockCount})
+    turn *= -1;
+
+    if (winner == 'T') {
+        message.textContent = 'Rats, another tie!'
+    } else if (winner) {
+        message.innerHTML = `Congrats ${lookup[winner]}!`
+
+    } else {
+        return;
+    }
+    
+    
 }
+
+function blockCount(p, turn) {
+    for(let i = 0; i < pieces[p].length; i++){
+        if(pieces[p][i] == 1){
+            if (turn == 1) {
+                player1BlockCount--;
+            } else {
+                player2BlockCount--;
+            }
+        }
+    }
+    
+}
+
 function rotate (e) { 
 //     let rotateThisPiece = e.target.parentNode.id;
 //     let thisPlayer = e.target.parentNode.parentNode.id.replace('player', '')
@@ -268,59 +328,87 @@ function rotate (e) {
 }
 
 
+
  // DRAG FUNCTIONS
 function dragStart (e) {
     console.log("start")
     e.target.className += ' hold'
-    setTimeout(() => (e.target.className = 'invisible'), 0)
 }
-function dragEnd (e) {
 
-    
+function dragEnd (e) {
+    // setTimeout(() => (e.target.className = 'invisible'), 0)
+    if (pieceReplace = true) {
+        setTimeout(() => (e.target.className = 'invisible'), 3)
+    }
+    pieceReplace = false;
 }
+
 function dragOver(e) {
     
     e.preventDefault();
     if(this.class == 'available'){
         this.classList.append(' hover')
     }
-    
 }
+
 function dragEnter() {
 
 }
-function dragLeave() {
-    if (this.classList.contains('claimed')) {
-        this.className = 'available'
-    }
-}
+
+// function dragLeave() {
+//     if (this.classList.contains('claimed')) {
+//         this.className = 'available'
+//     }
+// }
+
 function dragDrop() {
     // this.append(claimed);
-    e.target.className = 'invisible'
+    
 }
 
 
 
 function getWinner() {
-    // for all the pieces in each player's deck
-    for(p in player1Pieces){
-        // loop through the blocks in each piece and add it to the block count
-        for (b = 0; b < pieces[currentPiece].length; b++) {
-            if (pieces[currentPiece][b] == '1') {
-                player1BlockCount++;
-            }
-        }
-        //  
-        for(let n = 0; n < blockPosIndex.length; n++) { 
-            for(s in board) {
-                if (board[s + blockPosIndex[s]] == null) {
 
+    let blockPosIndexRem = [];
+    // loop through the board
+    for (s in board){ 
+        //loop thorugh remaining pieces
+        for(p in player1Pieces){ 
+            console.log("pieceWin" + p + player1Pieces)
+            //loop through blocks in premianing pieces
+            for (b in pieces[p]) {
+                if (pieces[p][b] == '1') {
+                    // create position index for that piece
+                    blockPosIndexRem.push(mathGrid[b])
+                }
+            }
+
+            for(let n = 0; n < blockPosIndexRem.length; n++) { 
+                if(board[s + blockPosIndexRem[n]] == null ){
+                    blockPosIndexRem = [];
+                    return;
+
+                } else {
+                    console.log("Game Over.")
+                    // compare blocks remaining 
                 }
             }
         }
-    // if no index and its surrounding spaces can fit any remaining(or their rotations
     }
-}
+
+    
+
+
+    //checks if play can continue (if there are still open squares)
+    if (board.includes(null)) {
+        return null;
+    } else {
+        return 'T';
+    }
+    
+};
+
 
 
 function initialize() {
@@ -336,26 +424,35 @@ function initialize() {
         null, null, null, null, null, null, null, null, null, null, 
         null, null, null, null, null, null, null, null, null, null, 
         0,0,0,0,0,0,0,0,0
-       
     ];
-    turn = 1;
-    winner = null;
+    // placing the cathedral
+    turn = 0;
+    if (turn == 0){
+        message.innerText = "Let's play! Player Two, place the Cathedral." 
+    } else {
+        
+    }
 
-    pieceBuild('infirmary', 2);
-    pieceBuild('inn', 2);
-    pieceBuild('inn2', 2);
-    pieceBuild('square', 2);
-    pieceBuild('tavern', 2);
-    pieceBuild('tavern2', 2);
-    pieceBuild('abbey', 2);
-    pieceBuild('bridge', 2);
-    pieceBuild('academy', 2);
-    pieceBuild('castle', 2);
-    pieceBuild('tower', 2);
-    pieceBuild('stable', 2);
-    pieceBuild('stable2', 2);
-    pieceBuild('manor', 2);
+    boardVis.addEventListener('click', function (e) {
+        if (turn == 0) { 
+            let index = parseInt(e.target.id.replace('sq', ''))
+                    // change cathedral spaces to black
+            for(let n = 0; n < pieces.cathedralIndex.length; n++) {  
     
+                    spaces[index + pieces.cathedralIndex[n]].style.backgroundColor = lookup[0]
+                    spaces[index + pieces.cathedralIndex[n]].className = "claimed";
+                    board[index + pieces.cathedralIndex[n]] = turn
+                
+            } 
+            
+        turn = 1;
+        }
+        message.innerText = "Alright, now it's Player One's turn. Drag one of your pieces onto the board."
+    });
+
+    winner = null;
+    blockPosIndex = [];
+
 
     pieceBuild('infirmary', 1);
     pieceBuild('inn', 1);
@@ -371,7 +468,29 @@ function initialize() {
     pieceBuild('stable', 1);
     pieceBuild('stable2', 1);
     pieceBuild('manor', 1);
+    
+    pieceBuild('infirmary', 2);
+    pieceBuild('inn', 2);
+    pieceBuild('inn2', 2);
+    pieceBuild('square', 2);
+    pieceBuild('tavern', 2);
+    pieceBuild('tavern2', 2);
+    pieceBuild('abbey', 2);
+    pieceBuild('bridge', 2);
+    pieceBuild('academy', 2);
+    pieceBuild('castle', 2);
+    pieceBuild('tower', 2);
+    pieceBuild('stable', 2);
+    pieceBuild('stable2', 2);
+    pieceBuild('manor', 2);
+
+    for (piece in pieces) { 
+        for (let b = 0; b < pieces[piece].length; b++) {
+            if (pieces[piece][b] == '1') {
+                player1BlockCount++;
+                player2BlockCount++;
+            }
+        }
+    }
+    
 }
-
-
-
