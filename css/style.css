@@ -3,6 +3,8 @@
     flex-flow: row wrap;
     font-weight: bold;
     text-align: center;
+    max-width: 70vw;
+    
 }
 
 .wrapper > * {
@@ -28,6 +30,7 @@ h4 {
     display: flex;
     justify-content: center;
     background: rgb(168, 193, 201);
+  
     
 }
 td div {
@@ -49,16 +52,16 @@ aside > div {
 
 .player1{
     background-color: rgba(149, 245, 229,0.75);
-    height: 33%;
-    width: 33%;
+    height: 32%;
+    width: 32%;
     border: 1px solid black;
     margin: -1px;
    
 }
 .player2{
     background-color: rgba(60, 109, 213,0.75);
-    height: 33%;
-    width: 33%;
+    height: 32%;
+    width: 32%;
     border: 1px solid black;
     margin: -1px;
    
@@ -116,8 +119,15 @@ aside > div > div  {
     justify-content: space-around;
     display: flex;
     flex-direction: column;
+   
 }
-
+h5 {
+    margin: 0 auto;
+}
+footer P {
+    font-size: 12px;
+    color:rgb(63, 63, 63);
+}
 @media all and (min-width: 600px) {
     .aside { flex: 2 0 0; }
 }
@@ -132,5 +142,6 @@ aside > div > div  {
 body {
     padding: 6px; 
     font-family: 'Alegreya', serif;
+    margin: 0 auto;
 
 }

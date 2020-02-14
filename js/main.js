@@ -138,9 +138,12 @@ let btn = document.getElementById('reset');
 let boardVis = document.querySelector('#board');
 let deck = document.querySelectorAll('.deck');
 let aside = document.querySelector('aside')
-let bldngs = document.querySelectorAll('.deck div')
 let p1deck = document.querySelector('#player1')
 let p2deck = document.querySelector('#player2')
+let bldngs1 = p1deck.querySelectorAll('div')
+let bldngs2 = p2deck.querySelectorAll('div')
+let p1 = document.querySelector('#p1')
+let p2 = document.querySelector('#p2')
 
 // EVENT LISTENERS
 btn.addEventListener('click', initialize)
@@ -240,16 +243,16 @@ function handleMove(event) {
 
     placePiece(index);
     //if piece is invisible remove it from remaining pieces
-    for(let i = 0; i < bldngs.length; i++){
-        console.log("WHEW"+ i + bldngs + bldngs[1])
-        if (bldngs[i].className == 'invisible') {
-            let idx = player1Pieces.indexOf(bldngs[i].id)
+    for(let i = 0; i < bldngs1.length; i++){
+        console.log("WHEW"+ i + bldngs1 + bldngs[1])
+        if (bldngs1[i].className == 'invisible') {
+            let idx = player1Pieces.indexOf(bldngs1[i].id)
             player1Pieces.splice(idx,1)
         }
     }
-    for(let i = 0; i < p1deck.length; i++){
-        if (p2deck[i].className == 'invisible') {
-            let idx = player2Pieces.indexOf(p2deck[i].id)
+    for(let i = 0; i < bldngs2.length; i++){
+        if (bldngs2[i].className == 'invisible') {
+            let idx = player2Pieces.indexOf(bldngs2[i].id)
             player2Pieces.splice(idx,1)
         }
     }
@@ -261,6 +264,9 @@ function handleMove(event) {
     winner = getWinner(); 
     message.textContent = "Player " + (lookup[turn+3]) + " "
     randomMsg();
+    p1.textContent = player1BlockCount
+    p2.textContent = player2BlockCount
+
 }
 
 
@@ -425,6 +431,7 @@ function initialize() {
         null, null, null, null, null, null, null, null, null, null, 
         0,0,0,0,0,0,0,0,0
     ];
+    
     // placing the cathedral
     turn = 0;
     if (turn == 0){
