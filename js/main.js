@@ -274,6 +274,8 @@ function handleMove(event) {
 function placePiece(index) { 
     // Loop through the blocks positions on the board based on the event.target
     for(let n = 0; n < blockPosIndex.length; n++){     
+
+        //COLLISION
     // surrounding and including the index (in the shape of the piece selected) are not null
         if (board[index + blockPosIndex[n]] != null || event.target.nextElementSibling.className == 'border' || event.target.previousElementSibling.className == 'border') { 
             console.log(`can't place at board[${index}]`)

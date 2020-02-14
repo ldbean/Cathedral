@@ -24,3 +24,5 @@ Each player begins with the same set of buildings of varying shapes and takes tu
 7) This cycle repeats itself until there are no more spaces on the board. 
 
 8) The winner is determined by the player with the smaller block count. 
+
+![board](/assets/boardEx.png)
