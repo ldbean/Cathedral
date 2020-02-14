@@ -134,24 +134,15 @@ let deck = document.querySelectorAll('.deck');
 let aside = document.querySelector('aside')
 let p1deck = document.querySelector('#player1')
 let p2deck = document.querySelector('#player2')
-// TODO How do I store the current piece being dragged in a variable?
 
 // EVENT LISTENERS
 btn.addEventListener('click', initialize)
-
 aside.addEventListener('dragstart', dragStart)
 aside.addEventListener('dragend', dragEnd)
 boardVis.addEventListener('dragover', dragOver);
 boardVis.addEventListener('dragenter', dragEnter);
 boardVis.addEventListener('dragleave', dragLeave);
-aside.addEventListener('click', function(e) {
-    let rotatePiece = e.target.parentNode.id;
-    console.log(rotatePiece)
-    for (p = 0; p < pieces[rotatePiece].length; p++) {
-        pieces[rotatePiece][p] = pieces[rotatePiece][p + rotateIndex[p]]
-    }
-    console.log(currentPiece)
-})
+aside.addEventListener('click', rotate);
 aside.addEventListener('dragstart', function(e) {
     console.log(e.target)
     currentPiece = e.target.id;
@@ -165,7 +156,7 @@ boardVis.addEventListener('drop', handleMove)
 initialize();
 function pieceBuild (building, player) {
     let thisPiece = document.getElementById(building)
-    if (player == 0) { 
+    if (player == 1) { 
         if (p1deck.contains(thisPiece)){
             thisPiece.remove()
         }
@@ -192,7 +183,7 @@ function pieceBuild (building, player) {
         let pieceBlock = document.createElement('div')
         pieceBlock.id = i
     // depending on the player listed
-        if (player == 0){ 
+        if (player == 1){ 
         // color the block according to the number in the array
             if (pieces[building][i] == 0) {
                 pieceBlock.className = 'pHolder'
@@ -212,10 +203,10 @@ function pieceBuild (building, player) {
         pieceBound.appendChild(pieceBlock)
     }
     // add building to the stage
-    pieceStage.appendChild(pieceBound)
+    pieceStage.append(pieceBound)
     pieceBound.id = building
     // add final building to respective player's deck
-    deck[player].appendChild(pieceStage)
+    deck[player - 1].appendChild(pieceStage)
 };
 
    
@@ -264,7 +255,17 @@ function placePiece(index) {
     // }
 
 }
-
+function rotate (e) { 
+//     let rotateThisPiece = e.target.parentNode.id;
+//     let thisPlayer = e.target.parentNode.parentNode.id.replace('player', '')
+//     for (p = 0; p < pieces[rotateThisPiece].length; p++) {
+//         pieces[rotateThisPiece][p] = pieces[rotateThisPiece][p + rotateIndex[p]]    
+//         // .splice(p + rotateIndex[p], 1, pieces[rotateThisPiece][p])
+//         console.log(rotateIndex[p])
+//     }
+//     pieceBuild(rotateThisPiece, thisPlayer)
+//     console.log(currentPiece)   
+}
 
 
  // DRAG FUNCTIONS
@@ -274,11 +275,11 @@ function dragStart (e) {
     setTimeout(() => (e.target.className = 'invisible'), 0)
 }
 function dragEnd (e) {
-    console.log("end")
+
     
 }
 function dragOver(e) {
-    console.log('dragging over')
+    
     e.preventDefault();
     if(this.class == 'available'){
         this.classList.append(' hover')
@@ -286,7 +287,7 @@ function dragOver(e) {
     
 }
 function dragEnter() {
-    console.log('enter')
+
 }
 function dragLeave() {
     if (this.classList.contains('claimed')) {
@@ -301,24 +302,24 @@ function dragDrop() {
 
 
 function getWinner() {
-    // // for all the(in each player's deck
-    // for(p in player1Pieces){
-    //     // loop through the blocks in each piece and add it to the blockPosIndex
-    //     for (b = 0; b < pieces.infirmary.length; b++) {
-    //         if (pieces.infirmary[b] == '1') {
-    //             blockPosIndex.push(mathGrid[b])
-    //         }
-    //     }
-    //     //  
-    //     for(let n = 0; n < blockPosIndex.length; n++) { 
-    //         for(s in board) {
-    //             if (board[s + blockPosIndex[s]] == null) {
+    // for all the pieces in each player's deck
+    for(p in player1Pieces){
+        // loop through the blocks in each piece and add it to the block count
+        for (b = 0; b < pieces[currentPiece].length; b++) {
+            if (pieces[currentPiece][b] == '1') {
+                player1BlockCount++;
+            }
+        }
+        //  
+        for(let n = 0; n < blockPosIndex.length; n++) { 
+            for(s in board) {
+                if (board[s + blockPosIndex[s]] == null) {
 
-    //             }
-    //         }
-    //     }
-    // // if no index and its surrounding spaces can fit any remaining(or their rotations
-    // }
+                }
+            }
+        }
+    // if no index and its surrounding spaces can fit any remaining(or their rotations
+    }
 }
 
 
@@ -340,20 +341,20 @@ function initialize() {
     turn = 1;
     winner = null;
 
-    pieceBuild('infirmary', 0);
-    pieceBuild('inn', 0);
-    pieceBuild('inn2', 0);
-    pieceBuild('square', 0);
-    pieceBuild('tavern', 0);
-    pieceBuild('tavern2', 0);
-    pieceBuild('abbey', 0);
-    pieceBuild('bridge', 0);
-    pieceBuild('academy', 0);
-    pieceBuild('castle', 0);
-    pieceBuild('tower', 0);
-    pieceBuild('stable', 0);
-    pieceBuild('stable2', 0);
-    pieceBuild('manor', 0);
+    pieceBuild('infirmary', 2);
+    pieceBuild('inn', 2);
+    pieceBuild('inn2', 2);
+    pieceBuild('square', 2);
+    pieceBuild('tavern', 2);
+    pieceBuild('tavern2', 2);
+    pieceBuild('abbey', 2);
+    pieceBuild('bridge', 2);
+    pieceBuild('academy', 2);
+    pieceBuild('castle', 2);
+    pieceBuild('tower', 2);
+    pieceBuild('stable', 2);
+    pieceBuild('stable2', 2);
+    pieceBuild('manor', 2);
     
 
     pieceBuild('infirmary', 1);
