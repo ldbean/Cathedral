@@ -2,8 +2,8 @@
     display: flex;  
     flex-flow: row wrap;
     font-weight: bold;
-    text-align: center;
-    max-width: 70vw;
+    
+    max-width: 900px
     
 }
 
@@ -16,6 +16,13 @@
 .header {
     background: rgb(33, 31, 31);
     color:mintcream;
+    text-align: center;
+}
+h1 {
+    font-size: 50px;
+}
+h3 {
+    margin-bottom: 5px;
 }
 h4 {
     margin: 4px 8px 8px 8px;
@@ -24,6 +31,7 @@ h4 {
 
 .footer {
     background: darkgray;
+    text-align: center;
 }
 
 .main {
@@ -69,8 +77,8 @@ aside > div {
 }
 
 .pHolder {
-    height: 33%;
-    width: 33%;
+    height: 32.5%;
+    width: 32.5%;
     margin: 0;
 }
 .invisible > * {
@@ -79,6 +87,7 @@ aside > div {
 #board {
     background-color: black;
     border:3px solid black;
+    margin: 10px;
 }
 
 .hovered {
@@ -140,8 +149,10 @@ footer P {
 }
 
 body {
+    display: flex;
     padding: 6px; 
     font-family: 'Alegreya', serif;
     margin: 0 auto;
+    justify-content: center;
 
 }

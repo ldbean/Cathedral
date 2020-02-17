@@ -134,7 +134,7 @@ let player2BlockCount = 0
 let spaces = document.querySelectorAll('td div');
 let available = document.querySelectorAll('.available');
 let message = document.querySelector('h3');
-let btn = document.getElementById('reset');
+// let btn = document.getElementById('reset');
 let boardVis = document.querySelector('#board');
 let deck = document.querySelectorAll('.deck');
 let aside = document.querySelector('aside')
@@ -146,7 +146,7 @@ let p1 = document.querySelector('#p1')
 let p2 = document.querySelector('#p2')
 
 // EVENT LISTENERS
-btn.addEventListener('click', initialize)
+// btn.addEventListener('click', initialize)
 aside.addEventListener('dragstart', dragStart)
 aside.addEventListener('dragend', dragEnd)
 boardVis.addEventListener('dragover', dragOver);
@@ -274,6 +274,8 @@ function handleMove(event) {
 function placePiece(index) { 
     // Loop through the blocks positions on the board based on the event.target
     for(let n = 0; n < blockPosIndex.length; n++){     
+
+        //COLLISION
     // surrounding and including the index (in the shape of the piece selected) are not null
         if (board[index + blockPosIndex[n]] != null || event.target.nextElementSibling.className == 'border' || event.target.previousElementSibling.className == 'border') { 
             console.log(`can't place at board[${index}]`)
@@ -435,7 +437,7 @@ function initialize() {
     // placing the cathedral
     turn = 0;
     if (turn == 0){
-        message.innerText = "Let's play! Player Two, place the Cathedral." 
+        message.innerText = "Let's play! Player Two, click on the board to place the Cathedral." 
     } else {
         
     }
@@ -444,6 +446,10 @@ function initialize() {
         if (turn == 0) { 
             let index = parseInt(e.target.id.replace('sq', ''))
                     // change cathedral spaces to black
+                if (e.target.nextElementSibling.className == 'border' || e.target.previousElementSibling.className == 'border') { 
+                    console.log(`can't place at board[${index}]`)
+                    return;
+                }
             for(let n = 0; n < pieces.cathedralIndex.length; n++) {  
     
                     spaces[index + pieces.cathedralIndex[n]].style.backgroundColor = lookup[0]
