@@ -2,12 +2,13 @@
 The original game of [Cathedral](https://www.cathedral-game.co.nz/index.html) is two-player, city-building strategy board game played with wooden blocks each in the shape of a different medieval building. 
 
 ![boardGame](https://www.cathedral-game.co.nz/gifs/grandalux2.gif)
-![pieces](/assets/pieces.png)
+<img width="250" alt="Original board game pieces" src="/assets/pieces.png" width="300px">
 
 Each player begins with the same set of buildings of varying shapes and takes turns placing their buildings within a 10 x 10 grid. The game ends when the grid no longer has space for the remaining pieces. The winner is determined by who's pieces' total area combined is the lesser of the two.
 
 ![board](/assets/boardEx.png)
 
+[Click here to play!](https://ldbean.github.io/Cathedral/)
 
 ### User Story
 
