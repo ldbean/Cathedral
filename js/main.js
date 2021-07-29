@@ -1,4 +1,5 @@
 // CONSTANTS
+import pieces from "./pieces.js";
 const lookup = {
     '2': "Two",
     '4': "One",
@@ -11,7 +12,7 @@ const lookup = {
 const mathGrid = [
     -11, -10, -9,
     -1,   0,   1,
-     9,  10,  11
+    9,  10,  11
 ]
 
 const rotateIndex = [
@@ -19,96 +20,6 @@ const rotateIndex = [
     -2, 0, 2,
     -6, -4, -2
 ];
-
-// PIECES
-const pieces = { 
-    infirmary: [
-        0, 1, 0,
-        1, 1, 1,
-        0, 1, 0
-    ],
-                    
-    square: [
-        1, 1, 0,
-        1, 1, 0,
-        0, 0, 0
-    ],
-
-    inn: [
-        0, 1, 0,
-        1, 1, 0,
-        0, 0, 0
-    ],
-
-    tavern: [
-        0, 0, 0,
-        0, 1, 0,
-        0, 0, 0
-    ],
-    inn: [
-        0,1,0,
-        1,1,0,
-        0,0,0
-    ],
-    inn2: [ 
-        0,1,0,
-        1,1,0,
-        0,0,0
-    ],
-    tavern:[
-        0,0,0,
-        0,1,0,
-        0,0,0
-    ],
-    tavern2: [
-        0,0,0,
-        0,1,0,
-        0,0,0
-    ],
-    stable:  [
-        0,1,0,
-        0,1,0,
-        0,0,0
-    ],
-    stable2: [
-        0,1,0,
-        0,1,0,
-        0,0,0
-    ],
-    bridge: [
-        0,1,0,
-        0,1,0,
-        0,1,0
-    ],
-    manor: [
-        0,1,0,
-        1,1,1,
-        0,0,0
-    ],
-    academy: [
-        0,1,0,
-        1,1,0,
-        0,1,1
-    ],
-    castle: [
-        1,0,1,
-        1,1,1,
-        0,0,0
-    ],
-    tower: [
-        0,0,1,
-        0,1,1,
-        1,1,0
-    ],
-    abbey: [
-        1,0,0,
-        1,1,0,
-        0,1,0
-    ],
-    cathedralIndex: [
-        -10,-1,0,1,10,20
-    ]
-};
 
 
 // STATE VARIABLES
@@ -160,8 +71,6 @@ aside.addEventListener('dragstart', function(e) {
 })
 boardVis.addEventListener('drop', handleMove)
 
-
-                                                                           
 // FUNCTIONS
 initialize();
 
@@ -223,17 +132,14 @@ function pieceBuild (building, player) {
     deck[player - 1].appendChild(pieceStage)
 };
 
-   
 function handleMove(event) {
     // get the index of the event.target
     let index = parseInt(event.target.id.replace('sq', ''));
     // current item being dragged 
-  
     console.log({index})
     console.log(`currentPiece ${currentPiece}`)
 
-    for (b = 0; b < pieces[currentPiece].length; b++) {
-       
+    for (let b = 0; b < pieces[currentPiece].length; b++) {
         if (pieces[currentPiece][b] == '1') {
             blockPosIndex.push(mathGrid[b])
         }
@@ -266,10 +172,7 @@ function handleMove(event) {
     randomMsg();
     p1.textContent = player1BlockCount
     p2.textContent = player2BlockCount
-
 }
-
-
 
 function placePiece(index) { 
     // Loop through the blocks positions on the board based on the event.target
@@ -290,9 +193,6 @@ function placePiece(index) {
     }
 
     // if no index and its surrounding spaces can fit any remaining areas(MVP or their rotations)
-    
-
-    
     blockCount(currentPiece, turn);
     console.log({player1BlockCount})
     console.log({player2BlockCount})
@@ -302,12 +202,9 @@ function placePiece(index) {
         message.textContent = 'Rats, another tie!'
     } else if (winner) {
         message.innerHTML = `Congrats ${lookup[winner]}!`
-
     } else {
         return;
     }
-    
-    
 }
 
 function blockCount(p, turn) {
@@ -320,7 +217,6 @@ function blockCount(p, turn) {
             }
         }
     }
-    
 }
 
 function rotate (e) { 
@@ -380,12 +276,12 @@ function getWinner() {
 
     let blockPosIndexRem = [];
     // loop through the board
-    for (s in board){ 
+    for (let s in board){ 
         //loop thorugh remaining pieces
-        for(p in player1Pieces){ 
+        for(let p in player1Pieces){ 
             console.log("pieceWin" + p + player1Pieces)
             //loop through blocks in premianing pieces
-            for (b in pieces[p]) {
+            for (let b in pieces[p]) {
                 if (pieces[p][b] == '1') {
                     // create position index for that piece
                     blockPosIndexRem.push(mathGrid[b])
@@ -441,24 +337,21 @@ function initialize() {
     } else {
         
     }
-
+    let cathedralIndex = pieces.cathedralIndex;
     boardVis.addEventListener('click', function (e) {
         if (turn == 0) { 
             let index = parseInt(e.target.id.replace('sq', ''))
                     // change cathedral spaces to black
-                if (e.target.nextElementSibling.className == 'border' || e.target.previousElementSibling.className == 'border') { 
-                    console.log(`can't place at board[${index}]`)
-                    return;
-                }
-            for(let n = 0; n < pieces.cathedralIndex.length; n++) {  
-    
-                    spaces[index + pieces.cathedralIndex[n]].style.backgroundColor = lookup[0]
-                    spaces[index + pieces.cathedralIndex[n]].className = "claimed";
-                    board[index + pieces.cathedralIndex[n]] = turn
-                
-            } 
-            
-        turn = 1;
+            if (e.target.nextElementSibling.className == 'border' || e.target.previousElementSibling.className == 'border') { 
+                console.log(`can't place at board[${index}]`)
+                return;
+            }
+            for(let n = 0; n < cathedralIndex.length; n++) {  
+                spaces[index + cathedralIndex[n]].style.backgroundColor = lookup[0]
+                spaces[index + cathedralIndex[n]].className = "claimed";
+                board[index + cathedralIndex[n]] = turn
+            }
+            turn = 1;
         }
         message.innerText = "Alright, now it's Player One's turn. Drag one of your pieces onto the board."
     });
