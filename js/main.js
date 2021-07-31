@@ -9,9 +9,17 @@ const lookup = {
     0: "black",
 };
 
-const mathGrid = [-11, -10, -9, -1, 0, 1, 9, 10, 11];
+const mathGrid = [
+    -11, -10, -9, 
+    -1, 0, 1, 
+    9, 10, 11
+];
 const cathedralIndex = [-10, -1, 0, 1, 10, 20];
-const rotateIndex = [2, 4, 6, -2, 0, 2, -6, -4, -2];
+const rotateIndex = [
+    2, 4, 6, 
+    -2, 0, 2, 
+    -6, -4, -2
+];
 
 // STATE VARIABLES
 let board;
@@ -73,8 +81,8 @@ function randomMsg() {
     message.textContent += phrases[Math.floor(Math.random() * phrases.length)];
 }
 
-function pieceBuild(building, player) {
-    let thisPiece = document.getElementById(building);
+function pieceBuild(piece, player) {
+    let thisPiece = document.getElementById(piece);
     if (player == 1) {
         if (p1deck.contains(thisPiece)) {
             thisPiece.remove();
@@ -87,27 +95,27 @@ function pieceBuild(building, player) {
 
     // create a separate space for generating
     let pieceStage = document.createDocumentFragment();
-    // create a bounding box for the building and add its attributes
-    //  TODO different bounding boxs for each piece
+    // create a bounding box for the piece and add its attributes
+    //  TODO different bounding boxes for each piece
     let pieceBound = document.createElement("div");
     pieceBound.draggable = true;
     pieceBound.className = "drag";
     pieceBound.className += " ";
-    for (let i = 0; i < pieces[building].length; i++) {
-        // create a pieceBlock for each building's array item
+    for (let i = 0; i < pieces[piece].length; i++) {
+        // create a pieceBlock for each piece's array item
         let pieceBlock = document.createElement("div");
         pieceBlock.id = i;
         // depending on the player listed
         if (player == 1) {
             // color the block according to the number in the array
-            if (pieces[building][i] == 0) {
+            if (pieces[piece][i] == 0) {
                 pieceBlock.className = "pHolder";
             } else {
                 pieceBlock.className = "player1";
                 player1BlockCount += 1;
             }
         } else {
-            if (pieces[building][i] == 0) {
+            if (pieces[piece][i] == 0) {
                 pieceBlock.className = "pHolder";
             } else {
                 pieceBlock.className = "player2";
@@ -117,10 +125,10 @@ function pieceBuild(building, player) {
         // add blocks to bounding box
         pieceBound.appendChild(pieceBlock);
     }
-    // add building to the stage
+    // add piece to the stage
     pieceStage.append(pieceBound);
-    pieceBound.id = building;
-    // add final building to respective player's deck
+    pieceBound.id = piece;
+    // add final piece to respective player's deck
     deck[player - 1].appendChild(pieceStage);
 }
 
