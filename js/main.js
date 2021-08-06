@@ -29,7 +29,6 @@ let winner;
 let currentPiece;
 
 let blockPosIndex = [];
-let potentialPieces = [];
 
 let pieceReplace = false;
 let player1Pieces = [Object.keys(pieces)];
@@ -184,7 +183,8 @@ function placePiece(index) {
             event.target.nextElementSibling.className == "border" ||
             event.target.previousElementSibling.className == "border"
         ) {
-            console.log(`can't place at board[${index}]`);
+            // message.innerText = "Can't place so close to the border!";
+            console.log("border ", event.target.nextElementSibling, event.target.previousElementSibling)
             pieceReplace = true;
             return;
         }
@@ -319,11 +319,7 @@ function initialize() {
 
     // placing the cathedral
     turn = 0;
-    if (turn == 0) {
-        message.innerText =
-            "Let's play! Player Two, click on the board to place the Cathedral.";
-    } else {
-    }
+    if (turn == 0) message.innerText = "Let's play! Player Two, click on the board to place the Cathedral.";
     // let cathedralIndex = pieces.cathedralIndex;
     boardVis.addEventListener("click", function (e) {
         if (turn == 0) {
@@ -334,6 +330,7 @@ function initialize() {
                 e.target.previousElementSibling.className == "border"
             ) {
                 console.log(`can't place at board[${index}]`);
+                message.innerText = "Can't place so close to the border!";
                 return;
             }
             for (let n = 0; n < cathedralIndex.length; n++) {
